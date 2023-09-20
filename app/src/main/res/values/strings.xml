@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">evaFinal</string>
+    <string name="title_activity_crear_lugar">CrearLugarActivity</string>
+</resources>
