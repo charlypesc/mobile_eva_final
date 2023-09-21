@@ -12,6 +12,9 @@ interface LugarDao {
     @Query("Select * from lugar order by orden")
     fun getAll():List<Lugar>
 
+    @Query("Select * from lugar where id= :id")
+    fun getById(id:Int):Lugar?
+
     @Query("Select count(*) from lugar")
     fun contar():Int
 

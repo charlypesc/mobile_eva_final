@@ -15,6 +15,11 @@
         android:theme="@style/Theme.EvaFinal"
         tools:targetApi="31">
         <activity
+            android:name=".DetallesActivity"
+            android:exported="false"
+            android:label="@string/title_activity_detalles"
+            android:theme="@style/Theme.EvaFinal" />
+        <activity
             android:name=".CrearLugarActivity"
             android:exported="false"
             android:label="@string/title_activity_crear_lugar"
