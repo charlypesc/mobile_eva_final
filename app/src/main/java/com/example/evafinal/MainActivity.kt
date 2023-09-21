@@ -22,7 +22,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,7 +83,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PantallaInicio() {
+fun PantallaInicio(lugares: List<Lugar>, onSave: () -> Unit) {
     val contexto = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -95,10 +101,10 @@ fun PantallaInicio() {
     }
 }
 @Composable
-fun ListaLugarUI(){
+fun ListaLugarUI(onSave:() -> Unit = {}){
     val contexto = LocalContext.current
     val (lugares, setLugares) = remember { mutableStateOf(emptyList<Lugar>()) }
-
+    val alcanceCorrutina = rememberCoroutineScope()
     LaunchedEffect(Unit){
         withContext(Dispatchers.IO){
             val dao = AppDataBase.getInstance(contexto).lugarDao()
@@ -139,13 +145,51 @@ Column (
                         Text(lugar.lugar, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                         Text("Costo x Noche: ${lugar.costoAlojamiento}" )
                         Text("Valor USD: ${getDolar(lugar.costoAlojamiento.toInt())}")
+                        Row(
+
+                        ){
+                            Icon(
+                                Icons.Filled.Info,
+                                contentDescription = "info",
+                                modifier = Modifier.clickable {
+//                                    alcanceCorrutina.launch(Dispatchers.IO ){
+//                                        val dao = AppDataBase.getInstance( contexto).tareaDao()
+//                                        dao.eliminar(tarea)
+//                                        onSave()
+//                                    }
+                                }, tint = Color.Blue
+                            )
+
+                            Icon(
+                                Icons.Filled.LocationOn,
+                                contentDescription = "Ubication",
+                                modifier = Modifier.clickable {
+//                                    alcanceCorrutina.launch(Dispatchers.IO ){
+//                                        val dao = AppDataBase.getInstance( contexto).tareaDao()
+//                                        dao.eliminar(tarea)
+//                                        onSave()
+//                                    }
+                                }, tint = Color.Blue
+                            )
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "Eliminar tarea",
+                                modifier = Modifier.clickable {
+                                    alcanceCorrutina.launch(Dispatchers.IO ){
+                                        val dao = AppDataBase.getInstance( contexto).lugarDao()
+                                        dao.eliminar(lugar)
+                                        onSave()
+                                    }
+                                }, tint = Color.Red
+                            )
+                        }
 
                     }
                 }
             }
 
         }
-        PantallaInicio()
+        PantallaInicio(lugares = lugares, onSave = onSave)
 
     }
 }
